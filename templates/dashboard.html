@@ -23,7 +23,7 @@
              {% if sub['parent_ID'] == task['_id'] %}
               <a class="h4 text-danger">{{sub['task']}}</a> 
               <a class="text-info ml-4">{{sub['assigned_to']}} </a>
-              <a class="text-secondary ml-4"> </a>
+              <a class="text-secondary ml-4">{{sub['status']}} </a>
              </p>
              {% endif %}
             {% endfor %}
