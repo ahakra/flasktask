@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% include 'navbar.html' %}
+{% endblock %}
+
+{% block body %}
+
+<div class="aligncenter">
+   <h1 >Update SubTask</h1>
+</div>
+<br><br>
+<form class="aligncenter mb-4" action="/update_sub/{{retrieved_task._id}}" method="POST">
+   <a class="h4 mr-2">Subtask</a>
+   <input type="text" name="main_task" value="{{ retrieved_task.task}}">
+   <br>
+   <a class="h4 mr-2">User Assigned To</a>
+   <select name="user" id="users">
+   
+      {% for user in users %}
+         {% if user.username == retrieved_task.assigned_to %}
+         <option selected="selected" value={{ user.username }}>{{ user.username }}</option>
+         {% else %}
+         <option  value={{ user.username }}>{{ user.username }}</option>
+         {% endif %}
+      {% endfor %}
+      
+    </select>
+    <br>
+    <a class="h4 mr-2">Status</a>
+    <select name="status" id="status">
+   
+         <option selected="selected" value="In progress">In Progress</option>
+         <option selected="selected" value="Done">Done</option>
+
+       
+    </select>
+<br>
+<br>
+   <input type="submit" value="update">
+</form>
+
+{% endblock %}

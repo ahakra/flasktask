@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% include 'navbar.html' %}
+{% endblock %}
+
+{% block body %}
+
+<div class="aligncenter">
+   <h1 >Update Task</h1>
+</div>
+<form class="aligncenter mb-4" action="/update/{{retrieved_task._id}}" method="POST">
+   <input type="text" name="main_task" value="{{ retrieved_task.task}}">
+   <input type="submit" value="update">
+</form>
+
+{% endblock %}

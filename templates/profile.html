@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+{% include 'navbar.html' %}
+<div class="container">
+    <div >
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    
+<h3>Name: <a class="text-primary">{{info.name}}</a></h3>
+<h3>Email: <a class="text-primary">{{info.email}}</a></h3>
+<h3>Description:<a class="text-primary"> {{info.description}}</a></h3>
+<a href="/change_password">change your password</a>   
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+
+<nav class="navbar navbar-dark bg-primary navbar-expand-lg ">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/dashboard">Dashboard </a>
+        </li>
+       
+      </ul>
+      
+       {% if  session['name']  %}
+       
+      
+    
+    <div class="dropdown">
+      <button class="dropbtn btn btn-secondary ">  {{  session['name']  }}   </button>
+      <div class="dropdown-content">
+        <a href="/profile/{{session['name']}}">My profile</a>
+        <a href="/view_tasks/{{session['name']}}">View Tasks</a>
+        <a href="/logout">Logout</a>
+      </div>
+    </div> 
+     
+     
+    
+      {% else %}
+    <form class="form-inline my-2 my-lg-0" class="ml-4 mb-4 mt-2" action="/login" method="POST">
+      <input class="btn btn-outline-dark my-2 my-sm-0" type="submit" value="Login"></input>
+  </form>
+      {% endif %}
+    </div>
+  </nav>
+
+  

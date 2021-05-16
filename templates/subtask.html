@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% include 'navbar.html' %}
+{% endblock %}
+
+{% block body %}
+<div class="m-2">
+    <h3 ><strong>Main Task: </strong><a class="text-info">{{ retrieved_task.task }}</a></h3>
+   <h3><strong>ID: </strong><a class="text-info">{{retrieved_task._id}}</a></h3>
+    <h3><strong>Date: </strong><a class="text-info">{{ retrieved_task.date_ins.strftime('%b/%d/%Y -- %H:%M')}}</a></h3>
+</div>
+ 
+
+<br>
+<form class=" mb-4" action="/subtask/{{retrieved_task._id}}" method="POST">
+   <a class="h4 mr-2">SubTask</a>
+    <input type="text" class="" name="main_task">
+    <a class="h4 mr-2">Assigned To</a>
+   <select name="user" id="users">
+     {% for user in users %}
+         <option value={{ user.username }}>{{ user.username }}</option>
+         class="h4 mr-2"{% endfor %}
+      </select>
+    <input type="submit" class="btn btn-primary" value="add subtask">
+ </form>
+  
+ <h2 class="m-2 text-info"> SubTasks</h2>
+ <table class="table table-striped"> 
+    <tr class="thead-dark">
+       <th>ID</th>
+       <th>Task</th>
+       <th>Added</th>
+       <th>Status</th>
+       <th>Assigned To</th>
+       <th>Action</th>
+    </tr>
+    {% for task in retrieved_subtask %}
+ <tr>
+    <td>{{ task._id}}</td>
+    <td>{{ task.task}}</td>
+    <td>{{ task.date_ins.strftime('%b/%d/%Y -- %H:%M')}}</td>
+    <td>{{task.status}}</td>
+    <td> {{task.assigned_to}}</td>
+ 
+  
+    <td>
+        <a href="/update_sub/{{task._id}}" class="btn btn-primary">update</a>
+        <a href="/delete_sub/{{task._id}}" class="btn btn-danger">delete</a>
+   </td>
+</tr>
+{% endfor %}
+</table>
+ 
+{% endblock %}

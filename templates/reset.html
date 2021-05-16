@@ -1,0 +1,38 @@
+
+{% extends 'base.html' %}
+
+{% block head %}
+{% include 'navbar.html' %}
+{% endblock %}
+
+{% block body %}
+<h2 class="container mt-3 text-primary">Reset Password</h2>
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+    </div>
+    {% endfor %}
+</div>
+
+<form class="container mt-5 border  border-primary " method="POST" action="/reset">
+   
+    {{ form.csrf_token }}
+    
+    <div class="form-group">
+    {{ form.username.label (class="form-text text-primary text-muted")}} {{ form.username(class="form-control" ) }}
+ 
+    </div>
+   
+            
+    
+    <div class="form-group">
+    <input class="btn btn-primary" type="submit" value="Go">
+    </div>
+
+</form>
+
+ 
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+{% include 'navbar.html' %}
+
+
+
+<div >
+    <table class="table table-striped"> 
+       <tr class="thead-dark">
+          <th>ID</th>
+          <th>ParentTask</th>
+          <th>SubTask</th>
+          <th>Added</th>
+          
+          <th>Action</th>
+       </tr>
+         {% for task in retrieved_subtask %}
+
+       <tr>
+          <td>{{ task._id}}</td>
+          <td>
+            {% for i in retrieved_task %}
+                  
+                   
+             {% if i['_id'] == task['parent_ID'] %}
+             <a href="/subtask/{{ i['_id']}}">{{i['task']}} </a>
+            
+             {% endif %}
+            {% endfor %}
+        </td>
+          <td>{{ task['task']}}</td>
+          <td>{{ task['date_ins'].strftime('%b/%d/%Y -- %H:%M')}}</td>
+         
+          <td>
+             <a href="/update_sub/{{task._id}}" class="btn btn-primary">update</a>
+             <a href="/delete_sub/{{task._id}}" class="btn btn-danger">delete</a>
+          
+         
+          </td>
+       </tr>
+       {% endfor %}
+    </table>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+{% include 'navbar.html' %}
+
+
+
+<div class="row ml-3 mt-3">
+     
+     
+         {% for task in main_task %}
+
+      <div class="col-5 ">
+        
+        <a class="h2 text-primary">{{task['task']}} </a>
+        <a class="h6 text-secondary">{{ task['date_ins'].strftime('%b/%d/%Y -- %H:%M')}}</a>
+            {% for sub in sub_task %}
+            <p class="ml-2">      
+             {% if sub['parent_ID'] == task['_id'] %}
+              <a class="h4 text-danger">{{sub['task']}}</a> 
+              <a class="text-info ml-4">{{sub['assigned_to']}} </a>
+              <a class="text-secondary ml-4"> </a>
+             </p>
+             {% endif %}
+            {% endfor %}
+        </div>
+          
+       {% endfor %}
+    
+    </div>
+
+{% endblock %}
