@@ -9,15 +9,15 @@
 
 
 
-<div class="row ml-3 mt-3">
+<div class="row m-3  ">
      
      
          {% for task in main_task %}
 
-      <div class="col-5 ">
+      <div class="col-6 ">
         
         <a class="h2 text-primary">{{task['task']}} </a>
-        <a class="h6 text-secondary">{{ task['date_ins'].strftime('%b/%d/%Y -- %H:%M')}}</a>
+        <a class="h6 text-secondary">{{ task['date_ins'].strftime('%b/%d/%Y   %H:%M')}}</a>
             {% for sub in sub_task %}
             <p class="ml-2">      
              {% if sub['parent_ID'] == task['_id'] %}

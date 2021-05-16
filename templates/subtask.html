@@ -28,7 +28,7 @@
  <h2 class="m-2 text-info"> SubTasks</h2>
  <table class="table table-striped"> 
     <tr class="thead-dark">
-       <th>ID</th>
+       
        <th>Task</th>
        <th>Added</th>
        <th>Status</th>
@@ -37,9 +37,9 @@
     </tr>
     {% for task in retrieved_subtask %}
  <tr>
-    <td>{{ task._id}}</td>
+    
     <td>{{ task.task}}</td>
-    <td>{{ task.date_ins.strftime('%b/%d/%Y -- %H:%M')}}</td>
+    <td>{{ task.date_ins.strftime('%b/%d/%Y  %H:%M')}}</td>
     <td>{{task.status}}</td>
     <td> {{task.assigned_to}}</td>
  
