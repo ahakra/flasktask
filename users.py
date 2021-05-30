@@ -169,7 +169,7 @@ def login():
      else:
            session.pop('_flashes', None)  
            return render_template("login.html",form=form) 
-     
+    return render_template("login.html",form=form) 
 @app_users.route('/logout', methods=['GET','POST'])
 def logout():
      session['name'] = None
