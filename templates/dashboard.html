@@ -14,17 +14,22 @@
      
          {% for task in main_task %}
 
-      <div class="col-6 ">
-        
-        <a class="h2 text-primary">{{task['task']}} </a>
+      <div class="col-6 row pb-5 ">
+        <div class="col-4">
+        <a class="h2 text-primary ">{{task['task']}} </a>
+       </div>
+       <div class="col-3">
         <a class="h6 text-secondary">{{ task['date_ins'].strftime('%b/%d/%Y   %H:%M')}}</a>
+       </div>
+       <div class="col-3"></div>
             {% for sub in sub_task %}
-            <p class="ml-2">      
+           
              {% if sub['parent_ID'] == task['_id'] %}
-              <a class="h4 text-danger">{{sub['task']}}</a> 
-              <a class="text-info ml-4">{{sub['assigned_to']}} </a>
-              <a class="text-secondary ml-4">{{sub['status']}} </a>
-             </p>
+
+             <div class="col-3 ml-2 border border-danger"><a class="h4 text-danger">{{sub['task']}}</a> </div> 
+             <div class="col-4 border border-danger"><a class="text-info ml-4">{{sub['assigned_to']}} </a></div> 
+             <div class="col-4 border border-danger"><a class="text-secondary ml-4">{{sub['status']}} </a></div> 
+
              {% endif %}
             {% endfor %}
         </div>
