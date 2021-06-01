@@ -30,10 +30,12 @@ class MyLogin(FlaskForm):
 class MyForm(MyLogin):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
     retype_password = PasswordField('Retype Password', validators=[DataRequired(),
     EqualTo("password", message='Passwords must match')])
-
+    
 class MyChangePassword(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     old_password = PasswordField('Old Password', validators=[DataRequired()])
@@ -79,6 +81,9 @@ def index():
              "description":description,"username":username,"password":pbkdf2_sha256.hash(password),
              "role":"user",})
              session['name'] = username
+             x = connect.tasks.find_one({"username":username})  
+             session['role'] = x['role']
+             print(session['role'])
              return redirect("/")
          else:
              flash("invalid email address")
@@ -129,7 +134,9 @@ def reset_username():
                  connect.tasks.update_one({"username": form.username.data},{ "$set" :{"password":pbkdf2_sha256.hash(form.retype_password.data)}})
                  session.clear()
                  session["name"] = form.username.data
-                
+                 x = connect.tasks.find_one({"username":username})  
+                 session['role'] = x['role']
+                 print(session['role'])
                  return redirect("/")
              else:
                  flash("password dont match")
@@ -157,8 +164,11 @@ def login():
             password = form.password.data
             if  connect.tasks.find_one({"username":username}):
              x = connect.tasks.find_one({"username":username})  
+
              if pbkdf2_sha256.verify(password,x['password']):
                  session['name'] =  username
+                 session['role'] = x['role']
+                 print(session['role'])
                  return redirect("/")
              else:    
                flash("wrong combination")
