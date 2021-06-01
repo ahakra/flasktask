@@ -29,7 +29,7 @@ def index():
       task = request.form.get('main_task')
       user= request.form.get('user')
       my_task = {"task":task , "date_ins":datetime.datetime.now()}
-     # tasks.insert_one(my_task)
+     
       connect.tasks.insert_one(my_task)
      
       return redirect('/')
@@ -42,6 +42,7 @@ def index():
 
 @app_views.route('/delete/<string:id>')
 def delete(id):
+ if session and session["name"] and session['role'] == "admin":   
   connect("task")    
   myquery = { "_id": ObjectId(id) }
   connect.tasks.delete_one(myquery)
@@ -50,30 +51,35 @@ def delete(id):
   myquery = { "parent_ID": ObjectId(id) }
   connect.tasks.delete_many(myquery)
   return redirect('/') 
+ else:
+      return  "you must be admin to delete task"
 
 
 
 @app_views.route('/update/<string:id>',methods=['GET','POST'])
 def update(id):
-     connect("task")  
-     retrieved_task = connect.tasks.find_one({"_id": ObjectId(id)})
-     if request.method == 'POST':
+     if session and session["name"]:
+      connect("task")  
+      retrieved_task = connect.tasks.find_one({"_id": ObjectId(id)})
+      if request.method == 'POST':
           content = request.form.get("main_task")
           connect.tasks.update_one({"_id": ObjectId(id)},{ "$set" :{"task":content}})
           return redirect('/')
-     else:
+      else:
           return render_template('update.html',retrieved_task=retrieved_task)
-
+     else:
+      return  "you must be loggedin to update task"
 
 @app_views.route('/subtask/<string:id>',methods=['GET','POST'])
 def details(id):
-  connect("sub_task")
-  retrieved_subtask = connect.tasks.find({"parent_ID": ObjectId(id)})
-  connect("task")
-  retrieved_task = connect.tasks.find_one({"_id": ObjectId(id)})
-  connect("users")
-  users = connect.tasks.find({})
-  if request.method == 'POST':
+  if session and session["name"]:  
+   connect("sub_task")
+   retrieved_subtask = connect.tasks.find({"parent_ID": ObjectId(id)})
+   connect("task")
+   retrieved_task = connect.tasks.find_one({"_id": ObjectId(id)})
+   connect("users")
+   users = connect.tasks.find({})
+   if request.method == 'POST':
            connect("sub_task")  
            task = request.form.get('main_task')
            user = request.form.get('user')
@@ -81,9 +87,10 @@ def details(id):
            connect.tasks.insert_one(my_task)
            return redirect('/')
 
-  else:
+   else:
      return render_template('subtask.html',users=users,retrieved_subtask=retrieved_subtask, retrieved_task=retrieved_task)
-
+  else:
+     return  "you must be loggedin to view details"
 @app_views.route('/delete_sub/<string:id>')
 def delete_sub(id):
   connect("sub_task")    
