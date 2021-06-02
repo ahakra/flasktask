@@ -24,8 +24,14 @@
    <tr>
       
       <td>{{user.name}}</td>
+      {% if session['role'] == "admin" %}
       <td>{{user.username}}</td>
       <td>{{user.email}}</td>
+      {% else %}
+      <td>*******</td>
+      <td>*******</td>
+      {% endif %}
+     
       <td>{{user.description}}</td>
       <td>
          <a href="/delete_user/{{user.username}}" class="btn btn-danger">delete</a>

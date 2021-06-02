@@ -151,7 +151,7 @@ def dashboard():
 
 @app_views.route("/list_users")
 def listusers():
-     if session and session['role'] == "admin":
+     if session :
       connect("users")
       users = connect.tasks.find({})
       return render_template("list_user.html",users=users)
