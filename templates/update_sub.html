@@ -16,11 +16,7 @@
    <br>
    <a class="h4 mr-2">User Assigned To</a>
    <select name="user" id="users">
-<<<<<<< HEAD
-      <option value=" "></option></select>
-=======
-   
->>>>>>> parent of 62420d3 (addes blank to users and status)
+      <option value=" "></option>
       {% for user in users %}
          {% if user.username == retrieved_task.assigned_to %}
          <option selected="selected" value={{ user.username }}>{{ user.username }}</option>

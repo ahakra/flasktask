@@ -85,7 +85,9 @@ def details(id):
            user = request.form.get('user')
            my_task = {"parent_ID":ObjectId(id),"task":task , "date_ins":datetime.datetime.now(),"assigned_to":user}
            connect.tasks.insert_one(my_task)
-           return redirect('/')
+           redirect_url = "/subtask/"+id
+
+           return redirect(redirect_url)
 
    else:
      return render_template('subtask.html',users=users,retrieved_subtask=retrieved_subtask, retrieved_task=retrieved_task)
@@ -95,10 +97,16 @@ def details(id):
 def delete_sub(id):
   connect("sub_task")    
   myquery = { "_id": ObjectId(id) }
+  x = connect.tasks.find_one(myquery)
+  parent_ID = x['parent_ID']
   connect.tasks.delete_one(myquery)
-  return redirect('/') 
-
-
+  connect("sub_task")
+  retrieved_subtask = connect.tasks.find({"parent_ID": ObjectId(parent_ID)})
+  connect("task")
+  retrieved_task = connect.tasks.find_one({"_id": ObjectId(parent_ID)})
+  connect("users")
+  users = connect.tasks.find({})
+  return render_template('subtask.html',users=users,retrieved_subtask=retrieved_subtask, retrieved_task=retrieved_task)
 
 @app_views.route('/update_sub/<string:id>',methods=['GET','POST'])
 def update_sub(id):
@@ -110,7 +118,16 @@ def update_sub(id):
           connect("sub_task")  
           content = request.form.get("main_task")
           connect.tasks.update_one({"_id": ObjectId(id)},{ "$set" :{"task":content,"assigned_to":request.form.get("user"),"status":request.form.get("status")}})
-          return redirect('/')
+          connect("sub_task")
+          myquery = { "_id": ObjectId(id) }
+          x = connect.tasks.find_one(myquery)
+          parent_ID = x['parent_ID']
+          retrieved_subtask = connect.tasks.find({"parent_ID": ObjectId(parent_ID)})
+          connect("task")
+          retrieved_task = connect.tasks.find_one({"_id": ObjectId(parent_ID)})
+          connect("users")
+          users = connect.tasks.find({})
+          return render_template('subtask.html',users=users,retrieved_subtask=retrieved_subtask, retrieved_task=retrieved_task)
      else:
           return render_template('update_sub.html',retrieved_task=retrieved_task,users=users)
 
@@ -131,3 +148,28 @@ def dashboard():
      connect("task")
      main_task = list(connect.tasks.find({}).sort("date_ins",-1))
      return render_template("dashboard.html",sub_task=sub_task,main_task=main_task)
+
+@app_views.route("/list_users")
+def listusers():
+     if session and session['role'] == "admin":
+      connect("users")
+      users = connect.tasks.find({})
+      return render_template("list_user.html",users=users)
+     else:
+          return "you are not authorized"
+
+@app_views.route("/delete_user/<string:username>")
+def deleteuser(username):
+    if session and session['role'] == "admin":
+      connect("sub_task")
+      find_tasks =connect.tasks.find( { "assigned_to": username} )
+      for task in find_tasks:
+       connect.tasks.update_one({"_id": ObjectId(task["_id"])},{ "$set" :{"assigned_to":" "}})
+      connect("users")
+      myquery = { "username": username}
+      connect.tasks.delete_one(myquery)
+      return listusers()
+    else:
+          return "you are not authorized"
+
+     
