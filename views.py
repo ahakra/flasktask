@@ -85,9 +85,7 @@ def details(id):
            user = request.form.get('user')
            my_task = {"parent_ID":ObjectId(id),"task":task , "date_ins":datetime.datetime.now(),"assigned_to":user}
            connect.tasks.insert_one(my_task)
-           redirect_url = "/subtask/"+id
-           
-           return redirect(redirect_url)
+           return redirect('/')
 
    else:
      return render_template('subtask.html',users=users,retrieved_subtask=retrieved_subtask, retrieved_task=retrieved_task)
@@ -97,18 +95,8 @@ def details(id):
 def delete_sub(id):
   connect("sub_task")    
   myquery = { "_id": ObjectId(id) }
-  x = connect.tasks.find_one(myquery)
-  parent_ID = x['parent_ID']
   connect.tasks.delete_one(myquery)
- 
-  connect("sub_task")
-  retrieved_subtask = connect.tasks.find({"parent_ID": ObjectId(parent_ID)})
-  connect("task")
-  retrieved_task = connect.tasks.find_one({"_id": ObjectId(parent_ID)})
-  connect("users")
-  users = connect.tasks.find({})
-  return render_template('subtask.html',users=users,retrieved_subtask=retrieved_subtask, retrieved_task=retrieved_task)
-
+  return redirect('/') 
 
 
 
@@ -122,19 +110,7 @@ def update_sub(id):
           connect("sub_task")  
           content = request.form.get("main_task")
           connect.tasks.update_one({"_id": ObjectId(id)},{ "$set" :{"task":content,"assigned_to":request.form.get("user"),"status":request.form.get("status")}})
-          connect("sub_task")
-          myquery = { "_id": ObjectId(id) }
-          x = connect.tasks.find_one(myquery)
-          parent_ID = x['parent_ID']
-          retrieved_subtask = connect.tasks.find({"parent_ID": ObjectId(parent_ID)})
-          connect("task")
-          retrieved_task = connect.tasks.find_one({"_id": ObjectId(parent_ID)})
-          connect("users")
-          users = connect.tasks.find({})
-          return render_template('subtask.html',users=users,retrieved_subtask=retrieved_subtask, retrieved_task=retrieved_task)
-
-
-
+          return redirect('/')
      else:
           return render_template('update_sub.html',retrieved_task=retrieved_task,users=users)
 

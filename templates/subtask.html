@@ -18,7 +18,6 @@
     <input type="text" class="" name="main_task">
     <a class="h4 mr-2">Assigned To</a>
    <select name="user" id="users">
-      <option value=" "></option>
      {% for user in users %}
          <option value={{ user.username }}>{{ user.username }}</option>
          class="h4 mr-2"{% endfor %}
