@@ -63,7 +63,7 @@ def index():
             connect()
             name = form.name.data
             email = form.email.data
-            username = form.username.data
+            username = form.username.data.lower()
             password = form.password.data
             description = form.description.data
             if connect.tasks.find_one({"email":email}) :
@@ -109,13 +109,13 @@ def reset():
     form = MyResetPassword()
     
     if request.method == "POST":
-        connect()
-        username =  connect.tasks.find_one({"username":form.username.data})
-        if connect.tasks.find_one({"username":form.username.data}):
-          print(form.username.data)  
-          print(username["email"])
+        connect()   
+        user= form.username.data
+        username =  connect.tasks.find_one({"username":user.lower()})
+        if connect.tasks.find_one({"username":user.lower()}):
+          
           reset_email(username["email"])
-          session["username"] = form.username.data
+          session["username"] = user.lower()
           return redirect("reset_username")
         else:
           flash("There is no account registered with this user: "+str(form.username.data))
@@ -131,12 +131,12 @@ def reset_username():
         if session["username"] == form.username.data:
            if pbkdf2_sha256.verify(str(form.code.data),session["code"]):
              if form.new_password.data == form.retype_password.data:
-                 connect.tasks.update_one({"username": form.username.data},{ "$set" :{"password":pbkdf2_sha256.hash(form.retype_password.data)}})
+                 connect.tasks.update_one({"username": form.username.data.lower()},{ "$set" :{"password":pbkdf2_sha256.hash(form.retype_password.data)}})
                  session.clear()
-                 session["name"] = form.username.data
-                 x = connect.tasks.find_one({"username":username})  
+                 session["name"] = form.username.data.lower()
+                 x = connect.tasks.find_one({"username":session["name"]})  
                  session['role'] = x['role']
-                 print(session['role'])
+                
                  return redirect("/")
              else:
                  flash("password dont match")
@@ -162,8 +162,8 @@ def login():
             connect()
             username = form.username.data
             password = form.password.data
-            if  connect.tasks.find_one({"username":username}):
-             x = connect.tasks.find_one({"username":username})  
+            if  connect.tasks.find_one({"username":username.lower()}):
+             x = connect.tasks.find_one({"username":username.lower()})  
 
              if pbkdf2_sha256.verify(password,x['password']):
                  session['name'] =  username
